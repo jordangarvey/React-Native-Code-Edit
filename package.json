@@ -1,0 +1,22 @@
+{
+	"name": "react-native-code-edit",
+	"version": "0.0.1",
+	"description": "A lightweight code editor for React Native",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"repository": "https://github.com/jordangarvey/React-Native-Code-Edit",
+	"author": "Jordan Garvey",
+	"license": "MIT",
+	"private": false,
+	"scripts": {
+		"build": "tsc",
+		"prepublish": "tsc"
+	},
+	"dependencies": {
+		"react": "^16.13.1",
+		"react-native": "^0.62.2"
+	},
+	"devDependencies": {
+		"typescript": "^3.9.3"
+	}
+}
