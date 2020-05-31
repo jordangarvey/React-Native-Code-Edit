@@ -8,8 +8,8 @@ interface ICodeEditorProps {
 
 }
 
-const CodeEditor: FC<ICodeEditorProps> = (props) => {
-	const [lines, setLines] = useState([""]);
+const CodeEditor: FC<ICodeEditorProps> = () => {
+	const [lines, setLines] = useState<string[]>([""]);
 
 	function onBackspace(lineNumber: number) {
 		// TODO: this should be if the cursor is at index 0
