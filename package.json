@@ -8,6 +8,17 @@
 	"author": "Jordan Garvey",
 	"license": "MIT",
 	"private": false,
+	"keywords": [
+		"react-native",
+		"reactjs",
+		"reactnative",
+		"code",
+		"code-editor",
+		"editor"
+	],
+	"bugs": {
+		"url": "https://github.com/jordangarvey/React-Native-Code-Edit/issues"
+	},
 	"scripts": {
 		"build": "tsc",
 		"prepublish": "tsc"
