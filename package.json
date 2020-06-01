@@ -17,6 +17,7 @@
 		"editor"
 	],
 	"bugs": {
+		"email": "jordan.garvey@icloud.com",
 		"url": "https://github.com/jordangarvey/React-Native-Code-Edit/issues"
 	},
 	"scripts": {
