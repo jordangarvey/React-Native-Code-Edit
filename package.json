@@ -5,7 +5,10 @@
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"repository": "https://github.com/jordangarvey/React-Native-Code-Edit",
-	"author": "Jordan Garvey",
+	"author": {
+		"name": "Jordan Garvey",
+		"email": "jordan.garvey@icloud.com"
+	},
 	"license": "MIT",
 	"private": false,
 	"keywords": [
