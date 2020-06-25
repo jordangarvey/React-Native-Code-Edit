@@ -1,6 +1,6 @@
 {
 	"name": "react-native-code-edit",
-	"version": "0.0.2",
+	"version": "0.1.0",
 	"description": "A lightweight code editor for React Native",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
