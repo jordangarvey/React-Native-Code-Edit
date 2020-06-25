@@ -1,87 +1,87 @@
 import React, { FC, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, TextInput } from "react-native";
 
-import Line from "./Line";
+import ParsedText from "react-native-parsed-text";
 
 
 interface ICodeEditorProps {
+	/** Optional language for syntax highlighting */
+	language?: "javascript";
 	/** Optionally set the initial value of the editor */
-	initialValue?: string[];
+	initialValue?: string;
 	/** Optional callback called with the current value of the editor */
-	onChange?(value: string[]): any;
+	onChange?(value: string): void;
 }
 
 const CodeEditor: FC<ICodeEditorProps> = (props) => {
-	const [lines, setLines] = useState<string[]>(props.initialValue || [""]);
+	const [code, setCode] = useState<string>(props.initialValue || "");
 
 	useEffect(() => {
 		if(props.onChange) {
-			props.onChange(lines);
+			props.onChange(code);
 		}
-	}, [lines]);
+	}, [code]);
 
-	function onBackspace(lineNumber: number) {
-		// TODO: this should be if the cursor is at index 0
-		if(!lines[lineNumber]) {
-			setLines(previousLines => {
-				previousLines.splice(lineNumber, 1);
-
-				return [...previousLines];
-			})
-		}
+	function onChange(text: string) {
+		setCode(text);
 	}
 
-	function onChange(text: string, lineNumber: number) {
-		setLines(previousLines => {
-			previousLines[lineNumber] = text;
+	function highlightSyntax() {
+		if(!props.language) {
+			return code;
+		}
+	
+		const langs = {
+			javascript: require("./langs/javascript")
+		};
 
-			return [...previousLines];
-		});
-	}
+		const { keywords } = langs[props.language];
 
-	function onEnterPress(lineNumber: number) {
-		setLines(previousLines => {
-			previousLines.splice(lineNumber + 1, 0, "");
-
-			return [...previousLines];
-		});
+		return (
+			<ParsedText
+				parse={
+					[
+						{pattern: new RegExp(keywords.join("|"), "gm"), style: { color: "#7796CB" }}
+					]
+				}
+				style={styles.syntax}
+			>
+				{code}
+			</ParsedText>
+		);
 	}
 
 	return (
-		<>
-			<View style={styles.lineNumberBorder}/>
+		<ScrollView alwaysBounceVertical={false} style={styles.scrollView}>
+			{highlightSyntax()}
 
-			<View style={styles.codeContainer}>
-				{
-					lines.map((line, index) => (
-						<Line
-							key={index}
-							lineNumber={index}
-							onBackspace={onBackspace}
-							onChange={onChange}
-							onEnterPress={onEnterPress}
-							value={line}
-						/>
-					))
-				}
-			</View>
-		</>
+			<TextInput
+				autoCapitalize="none"
+				autoCorrect={false}
+				autoFocus={true}
+				multiline={true}
+				onChangeText={onChange}
+				returnKeyType="next"
+				spellCheck={false}
+				style={styles.input}
+				textAlignVertical="top"
+				textContentType="none"
+				value={code}
+			/>
+		</ScrollView>
 	);
 };
 
 const styles = StyleSheet.create({
-	codeContainer: {
-		height: "100%",
-		position: "absolute",
-		width: "100%"
+	input: {
+		color: "transparent",
 	},
-	lineNumberBorder: {
-		borderColor: "#000000",
-		borderWidth: 0.5,
-		height: "100%",
-		left: 30,
+	scrollView: {
+		flex: 1
+	},
+	syntax: {
 		position: "absolute",
-		width: 0
+		top: 0
 	}
 });
 

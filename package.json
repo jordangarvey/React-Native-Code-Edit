@@ -29,7 +29,8 @@
 	},
 	"dependencies": {
 		"react": "^16.13.1",
-		"react-native": "^0.62.2"
+		"react-native": "^0.62.2",
+		"react-native-parsed-text": "^0.0.22"
 	},
 	"devDependencies": {
 		"@types/react": "^16.9.35",
