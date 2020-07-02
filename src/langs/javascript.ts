@@ -35,3 +35,7 @@ export const keywords = [
 	"with",
 	"yield"
 ];
+
+export const singleLineComments = [
+	"//"
+];

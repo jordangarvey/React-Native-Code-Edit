@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, TextInput } from "react-native";
+import { ScrollView, StyleSheet, TextInput, TextStyle, StyleProp } from "react-native";
 
 import ParsedText from "react-native-parsed-text";
 
@@ -36,15 +36,21 @@ const CodeEditor: FC<ICodeEditorProps> = (props) => {
 			javascript: require("./langs/javascript")
 		};
 
-		const { keywords } = langs[props.language];
+		const { keywords, singleLineComments } = langs[props.language];
+
+		const patterns: { pattern: RegExp; style: StyleProp<TextStyle>; }[] = [];
+
+		if(singleLineComments) {
+			patterns.push({ pattern: new RegExp(`(${singleLineComments.join("|")})(.*)$`, "gm"), style: { color: "grey" } });
+		}
+
+		if(keywords) {
+			patterns.push({ pattern: new RegExp(keywords.join("|"), "g"), style: { color: "#7796CB" } });
+		}
 
 		return (
 			<ParsedText
-				parse={
-					[
-						{pattern: new RegExp(keywords.join("|"), "gm"), style: { color: "#7796CB" }}
-					]
-				}
+				parse={patterns}
 				style={styles.syntax}
 			>
 				{code}
