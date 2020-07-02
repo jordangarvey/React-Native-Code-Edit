@@ -6,7 +6,7 @@ import ParsedText from "react-native-parsed-text";
 
 interface ICodeEditorProps {
 	/** Optional language for syntax highlighting */
-	language?: "javascript";
+	language?: "java" | "javascript";
 	/** Optionally set the initial value of the editor */
 	initialValue?: string;
 	/** Optional callback called with the current value of the editor */
@@ -30,8 +30,9 @@ const CodeEditor: FC<ICodeEditorProps> = (props) => {
 		if(!props.language) {
 			return code;
 		}
-	
+
 		const langs = {
+			java: require("./langs/java"),
 			javascript: require("./langs/javascript")
 		};
 
