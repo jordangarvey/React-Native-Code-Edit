@@ -1,77 +1,65 @@
-import React, { FC, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, TextInput, TextStyle, StyleProp } from "react-native";
+import { useMemo, useState, type FC } from "react";
+import { Platform, ScrollView, StyleSheet, Text, TextInput } from "react-native";
 
-import ParsedText from "react-native-parsed-text";
+import { tokenize } from "./highlight";
+import { patternsFor, type Language } from "./langs";
 
-
-interface ICodeEditorProps {
+export interface CodeEditorProps {
 	/** Optional language for syntax highlighting */
-	language?: "java" | "javascript";
-	/** Optionally set the initial value of the editor */
+	language?: Language;
+	/** Starting contents. Only read on first render; ignored when `value` is set. */
 	initialValue?: string;
-	/** Optional callback called with the current value of the editor */
+	/** Contents of the editor. Passing this makes the editor controlled. */
+	value?: string;
+	/** Called with the new contents whenever the user edits */
 	onChange?(value: string): void;
+	/** Whether to focus the editor on mount */
+	autoFocus?: boolean;
 }
 
-const CodeEditor: FC<ICodeEditorProps> = (props) => {
-	const [code, setCode] = useState<string>(props.initialValue || "");
+const CodeEditor: FC<CodeEditorProps> = ({
+	autoFocus = true,
+	initialValue,
+	language,
+	onChange,
+	value
+}) => {
+	const [uncontrolledCode, setUncontrolledCode] = useState<string>(initialValue ?? "");
 
-	useEffect(() => {
-		if(props.onChange) {
-			props.onChange(code);
-		}
-	}, [code]);
+	const isControlled = value !== undefined;
+	const code = isControlled ? value : uncontrolledCode;
 
-	function onChange(text: string) {
-		setCode(text);
-	}
+	const patterns = useMemo(() => (language ? patternsFor(language) : null), [language]);
+	const tokens = useMemo(() => (patterns ? tokenize(code, patterns) : null), [code, patterns]);
 
-	function highlightSyntax() {
-		if(!props.language) {
-			return code;
-		}
-
-		const langs = {
-			java: require("./langs/java"),
-			javascript: require("./langs/javascript")
-		};
-
-		const { keywords, singleLineComments } = langs[props.language];
-
-		const patterns: { pattern: RegExp; style: StyleProp<TextStyle>; }[] = [];
-
-		if(singleLineComments) {
-			patterns.push({ pattern: new RegExp(`(${singleLineComments.join("|")})(.*)$`, "gm"), style: { color: "grey" } });
+	function handleChangeText(text: string) {
+		// A controlled editor renders whatever the parent sends back instead.
+		if(!isControlled) {
+			setUncontrolledCode(text);
 		}
 
-		if(keywords) {
-			patterns.push({ pattern: new RegExp(keywords.join("|"), "g"), style: { color: "#7796CB" } });
-		}
-
-		return (
-			<ParsedText
-				parse={patterns}
-				style={styles.syntax}
-			>
-				{code}
-			</ParsedText>
-		);
+		onChange?.(text);
 	}
 
 	return (
 		<ScrollView alwaysBounceVertical={false} style={styles.scrollView}>
-			{highlightSyntax()}
+			<Text style={[styles.text, styles.highlight]}>
+				{tokens
+					? tokens.map((token, index) => (
+						<Text key={index} style={token.style}>{token.text}</Text>
+					))
+					: code}
+			</Text>
 
 			<TextInput
 				autoCapitalize="none"
 				autoCorrect={false}
-				autoFocus={true}
+				autoFocus={autoFocus}
 				multiline={true}
-				onChangeText={onChange}
+				onChangeText={handleChangeText}
 				returnKeyType="next"
 				spellCheck={false}
-				style={styles.input}
-				textAlignVertical="top"
+				style={[styles.text, styles.input]}
 				textContentType="none"
 				value={code}
 			/>
@@ -80,16 +68,32 @@ const CodeEditor: FC<ICodeEditorProps> = (props) => {
 };
 
 const styles = StyleSheet.create({
+	highlight: {
+		left: 0,
+		position: "absolute",
+		right: 0,
+		top: 0
+	},
 	input: {
-		color: "transparent",
+		// The input is stacked over the highlighted copy of the same text, so
+		// only its caret and selection should be visible.
+		color: "transparent"
 	},
 	scrollView: {
 		flex: 1
 	},
-	syntax: {
-		position: "absolute",
-		top: 0
+	text: {
+		// Both layers have to share these metrics exactly. When they diverge the
+		// caret drifts further from the highlighted text on every line.
+		fontFamily: Platform.select({ ios: "Menlo", default: "monospace" }),
+		fontSize: 14,
+		includeFontPadding: false,
+		lineHeight: 20,
+		padding: 12,
+		textAlignVertical: "top"
 	}
 });
 
 export default CodeEditor;
+export type { Language };
+export { supportedLanguages } from "./langs";
