@@ -1,3 +1,5 @@
+import type { LanguageDefinition } from "./types";
+
 export const keywords = [
 	"async",
 	"await",
@@ -15,6 +17,7 @@ export const keywords = [
 	"enum",
 	"export",
 	"extends",
+	"false",
 	"finally",
 	"for",
 	"function",
@@ -24,14 +27,17 @@ export const keywords = [
 	"instanceof",
 	"let",
 	"new",
+	"null",
 	"return",
 	"static",
 	"super",
 	"switch",
 	"this",
 	"throw",
+	"true",
 	"try",
 	"typeof",
+	"undefined",
 	"var",
 	"void",
 	"while",
@@ -39,6 +45,11 @@ export const keywords = [
 	"yield"
 ];
 
-export const singleLineComments = [
-	"//"
-];
+export const javascript: LanguageDefinition = {
+	keywords,
+	lineComments: ["//"],
+	blockComments: [["/*", "*/"]],
+	quotes: ["\"", "'"],
+	blockQuotes: [["`", "`"]],
+	numbers: true
+};
