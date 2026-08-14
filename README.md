@@ -135,6 +135,16 @@ npm run build     # what gets published
 
 `npm run test:watch` reruns on change, and `npm run test:coverage` writes a report. All three commands run in CI on every push and pull request.
 
+The suite runs twice, once per platform, so the iOS and Android paths are both exercised.
+
+To try it on a simulator, `example/` is an Expo app wired to the local source:
+
+```sh
+cd example && npm install && npm run ios
+```
+
+It needs no `pod install` and no prebuild, because the library has no native code. See [example/README.md](example/README.md) for what is worth checking there.
+
 Component tests use [React Native Testing Library](https://callstack.github.io/react-native-testing-library/) on top of `@react-native/jest-preset`. Note that Jest is pinned to 29 rather than 30: React Native 0.87's preset still depends on the Jest 29 environment packages, and mixing the two breaks the runtime.
 
 ## Upgrading from 0.x

@@ -1,0 +1,12 @@
+{
+	"expo": {
+		"name": "Code Edit Example",
+		"slug": "react-native-code-edit-example",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"userInterfaceStyle": "automatic",
+		"ios": {
+			"supportsTablet": true
+		}
+	}
+}
