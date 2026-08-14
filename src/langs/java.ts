@@ -1,3 +1,5 @@
+import type { LanguageDefinition } from "./types";
+
 export const keywords = [
 	"abstract",
 	"assert",
@@ -16,12 +18,13 @@ export const keywords = [
 	"else",
 	"enum",
 	"extends",
+	"false",
 	"final",
 	"finally",
 	"float",
 	"for",
 	"goto",
-	"private",
+	"if",
 	"implements",
 	"import",
 	"instanceof",
@@ -30,10 +33,12 @@ export const keywords = [
 	"long",
 	"native",
 	"new",
+	"null",
 	"package",
 	"private",
 	"protected",
 	"public",
+	"record",
 	"return",
 	"short",
 	"static",
@@ -41,15 +46,22 @@ export const keywords = [
 	"super",
 	"switch",
 	"synchronized",
+	"this",
 	"throw",
 	"throws",
 	"transient",
+	"true",
 	"try",
+	"var",
 	"void",
 	"volatile",
 	"while"
 ];
 
-export const singleLineComments = [
-	"//"
-];
+export const java: LanguageDefinition = {
+	keywords,
+	lineComments: ["//"],
+	blockComments: [["/*", "*/"]],
+	quotes: ["\"", "'"],
+	numbers: true
+};

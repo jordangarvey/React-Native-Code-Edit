@@ -1,0 +1,21 @@
+{
+	"name": "react-native-code-edit-example",
+	"version": "1.0.0",
+	"private": true,
+	"main": "index.js",
+	"scripts": {
+		"start": "expo start",
+		"ios": "expo start --ios",
+		"android": "expo start --android"
+	},
+	"dependencies": {
+		"expo": "~57.0.12",
+		"react": "19.2.3",
+		"react-native": "0.86.2",
+		"react-native-code-edit": "file:.."
+	},
+	"devDependencies": {
+		"@types/react": "~19.2.18",
+		"typescript": "~5.9.3"
+	}
+}
