@@ -124,6 +124,19 @@ Line numbers are deliberately absent. Long lines wrap, and a wrapped line makes 
 
 Verified against React Native 0.71 through 0.87, on React 18 and 19. Being pure JavaScript, it has no opinion about your Xcode version and works on both the old and new architectures.
 
+## Development
+
+```sh
+npm install
+npm test          # Jest, unit and component tests
+npm run typecheck # source and tests
+npm run build     # what gets published
+```
+
+`npm run test:watch` reruns on change, and `npm run test:coverage` writes a report. All three commands run in CI on every push and pull request.
+
+Component tests use [React Native Testing Library](https://callstack.github.io/react-native-testing-library/) on top of `@react-native/jest-preset`. Note that Jest is pinned to 29 rather than 30: React Native 0.87's preset still depends on the Jest 29 environment packages, and mixing the two breaks the runtime.
+
 ## Upgrading from 0.x
 
 The component and the `language` / `initialValue` / `onChange` props work as they did, so most code needs no changes. What changed:

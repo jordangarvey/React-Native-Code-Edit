@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,6 +19,11 @@ jobs:
 
       - run: npm ci
 
-      - run: npm run typecheck
+      - name: Type-check source and tests
+        run: npm run typecheck
 
-      - run: npm test
+      - name: Run tests
+        run: npm test -- --ci --coverage
+
+      - name: Build the publishable output
+        run: npm run build
