@@ -1,5 +1,5 @@
 import { createRef } from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import type { TextStyle, ViewStyle } from "react-native";
 import { act, fireEvent, render, screen } from "@testing-library/react-native";
 
@@ -217,6 +217,17 @@ describe("layer alignment", () => {
 		await render(<CodeEditor fontSize={20} />);
 
 		expect(flatten(input()).lineHeight).toBe(30);
+	});
+
+	it("defaults to a font the current platform actually ships", async () => {
+		// Menlo is present on iOS; Android resolves "monospace" itself. Getting
+		// this wrong falls back to a proportional font, and code stops lining up.
+		await render(<CodeEditor />);
+
+		const expected = Platform.OS === "ios" ? "Menlo" : "monospace";
+
+		expect(flatten(input()).fontFamily).toBe(expected);
+		expect(flatten(highlight()).fontFamily).toBe(expected);
 	});
 });
 
